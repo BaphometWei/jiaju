@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+    <mapper namespace="com.jiaju.mapper.ProductMapper">
+        <select id="list" resultType="Product">
+            SELECT * FROM product_ ORDER BY id DESC limit 0,8
+        </select>
+        
+        <select id="allProduct" resultType="Product">
+        	select * from product_
+        </select>
+        
+        <select id="listProduct" parameterType="java.util.Map" resultType="Product">
+        	select * from product_
+        	<where>
+        		<if test="pname!=null">
+        			and pname like concat('%',#{pname},'%')
+        		</if>
+        		<if test="style!=null">
+        			and style =#{style}
+        		</if>
+        		<if test="function!=null">
+        			and function =#{function}
+        		</if>
+        		<if test="material!=null">
+        			and material =#{material}
+        		</if>
+        	</where>
+        </select>
+        
+        <select id="upprice" parameterType="java.util.Map" resultType="Product">
+        	select * from product_
+        	<where>
+        		<if test="pname!=null">
+        			and pname like concat('%',#{pname},'%')
+        		</if>
+        		<if test="style!=null">
+        			and style =#{style}
+        		</if>
+        		<if test="function!=null">
+        			and function =#{function}
+        		</if>
+        		<if test="material!=null">
+        			and material =#{material}
+        		</if>
+        	</where>
+        	order by price
+        </select>
+        
+        <select id="downprice" parameterType="java.util.Map" resultType="Product">
+        	select * from product_
+        	<where>
+        		<if test="pname!=null">
+        			and pname like concat('%',#{pname},'%')
+        		</if>
+        		<if test="style!=null">
+        			and style =#{style}
+        		</if>
+        		<if test="function!=null">
+        			and function =#{function}
+        		</if>
+        		<if test="material!=null">
+        			and material =#{material}
+        		</if>
+        	</where>
+        	order by price DESC
+        </select>
+        
+        <select id="searchProduct" parameterType="Product" resultType="Product">
+        	select * from product_
+        		<if test="pname!=null">
+        		where pname like concat('%',#{pname},'%')
+        		</if>
+        </select> 
+        
+        <select id="productdetail" resultType="Product">
+        	select * from product_ where id=#{0}
+        </select> 
+        
+        <update id="updatenum" parameterType="Product">
+        	update product_ set num=#{num} where id=#{id}
+        </update>
+        
+        <update id="updateproduct">
+        	update product_ set pname=#{pname},style=#{style},function=#{function},material=#{material},price=#{price},num=#{num},miaoshu=#{miaoshu} where id=#{id}
+        </update>
+         
+        <update id="updateimage" parameterType="java.util.Map" statementType="STATEMENT">
+     		update product_ set ${canshu}=${value} where id=${id}
+     	</update>
+     	
+     	<insert id="addproduct" parameterType="Product">
+     		insert into product_ (pname,price,num,imagename,imagename1,imagename2,style,function,material,miaoshu) values(#{pname},#{price},#{num},#{imagename},#{imagename1},#{imagename2},#{style},#{function},#{material},#{miaoshu})
+     	</insert>
+    </mapper>

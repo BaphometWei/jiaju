@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+    <mapper namespace="com.jiaju.mapper.OrderMapper">
+    <insert id="addOrder" parameterType="Order" keyProperty="id" useGeneratedKeys="true">
+    	insert into order_(uid,address,phone,sum,addtime) values(#{uid},#{address},#{phone},#{sum},#{addtime})
+    </insert>
+    
+    <insert id="tjshouhou" parameterType="ShouHou">
+    	insert into shouhou(oid,uid,address,phone,sum,reason,wuliu,addtime) values(#{oid},#{uid},#{address},#{phone},#{sum},#{reason},#{wuliu},#{addtime})
+    </insert>
+    
+    <select id="ddinfo" resultType="Order">
+    	select * from order_ where uid=#{0}
+    </select>
+    
+    <select id="selectorder" resultType="Order">
+    	select * from order_ where id=#{0}
+    </select>
+    
+    <select id="deleteorder">
+    	delete from order_ where id=#{0}
+    </select>
+    
+    <select id="dayorder" resultType="java.lang.Integer">
+    	select count(*) from order_ where addtime=#{0}
+    </select>
+    
+    <select id="daysum" resultType="java.lang.Integer">
+    	select coalesce(sum(sum),0) from order_ where addtime=#{0}
+    </select>
+    
+    <select id="monthorder" resultType="java.lang.Integer">
+     	SELECT COUNT(*) FROM order_ WHERE addtime like concat(#{0},'%')
+    </select>
+    
+    <select id="monthsum" resultType="java.lang.Integer">
+    	select coalesce(sum(sum),0) from order_ where addtime like concat(#{0},'%')
+    </select>
+    
+    <select id="reorder" resultType="Order">
+        SELECT * FROM order_ ORDER BY id DESC limit 0,5
+    </select>
+    
+    <update id="shouhou">
+    	update order_ set wuliu=#{1} where id=#{0}
+    </update>
+    
+    <select id="allorder" resultType="Order">
+    	select * from order_
+    </select>
+    
+    <select id="weifahuo" resultType="Order">
+    	select * from order_ where wuliu=#{0}
+    </select>
+    
+  	<select id="getshouhou" resultType="ShouHou">
+    	select * from shouhou
+    </select>
+    
+    <select id="deleteshouhou">
+    	delete from shouhou where oid=#{0}
+    </select>
+  	
+    <update id="updateorder" parameterType="Order">
+    	update order_ set address=#{address},phone=#{phone} where id=#{id}
+    </update>
+    
+    </mapper>

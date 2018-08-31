@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	<mapper namespace="com.jiaju.mapper.ShoppingCartMapper">
+		<resultMap type="User" id="shoppingcart1">
+    		<id column="id" property="id"/>
+    		<result column="username" property="username"/>
+    		<collection property="shoppingCarts" ofType="ShoppingCart">
+    		<id column="id" property="id"></id>
+    		<result column="pid" property="pid"></result>
+    		<result column="num" property="num"/>
+    		<association property="product" javaType="Product">
+    		<id column="id" property="id"/>
+    		<result column="pname" property="pname"/>
+    		<result column="price" property="price"/>
+    		<result column="imagename" property="imagename"/> 
+    		</association>
+    		</collection>
+    		</resultMap>
+    	<select id="selectsc" resultMap="shoppingcart1">
+    		select u.username,s.num,p.id,p.pname,p.price,p.imagename from user_ u,product_ p,shoppingcart s where u.username=#{0} and u.id=s.uid and s.pid=p.id and p.id=#{1} 
+    	</select>
+    	
+    	<update id="updatenum">
+    		UPDATE shoppingcart s INNER JOIN user_ u ON u.id=s.uid SET s.num=#{0} WHERE s.pid=#{1} AND u.username=#{2} 
+    	</update>
+    	
+    	<delete id="deletesc">
+    		delete s from shoppingcart s,user_ u where u.username=#{0} and u.id=s.uid and s.pid=#{1}
+    	</delete>
+    	<insert id="addsc">
+    		insert into shoppingcart (uid,pid,num) values(#{0},#{1},#{2})
+    	</insert>
+    </mapper>

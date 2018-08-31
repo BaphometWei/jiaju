@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+    <mapper namespace="com.jiaju.mapper.OrderDetailsMapper">
+    	<insert id="addOrderDetails" parameterType="OrderDetails">
+    		insert into orderdetails (oid,product_id,num,addtime) values(#{oid},#{product_id},#{num},#{addtime})
+    	</insert>
+    	
+    	<resultMap type="Order" id="oddetails">
+    		<id column="oid" property="id"/>
+    		<result column="uid" property="uid"/>
+    		<result column="wuliu" property="wuliu"></result>
+    		<collection property="orderDetails" ofType="OrderDetails">
+    		<id column="odid" property="id"></id>
+    		<result column="num" property="num"/>
+    		<association property="product" javaType="Product">
+    		<id column="id" property="id"/>
+    		<result column="pname" property="pname"/>
+    		<result column="price" property="price"/>
+    		<result column="imagename" property="imagename"/> 
+    		</association>
+    		</collection>
+    	</resultMap>
+    	<select id="odd" resultMap="oddetails">
+    		select o.id oid,o.uid,o.wuliu,s.id odid,s.num,p.pname,p.price,p.imagename from order_ o,product_ p,orderdetails s where o.id=#{0} and o.id=s.oid and s.product_id=p.id 
+    	</select>
+    	
+    	<select id="tjxiaoliang" resultType="java.lang.Integer">
+    		select coalesce(sum(num),0) from orderdetails where product_id=#{0} and addtime=#{1}
+    	</select>
+    </mapper>

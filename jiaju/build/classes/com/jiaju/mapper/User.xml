@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+    <mapper namespace="com.jiaju.mapper.UserMapper">
+    	<resultMap type="User" id="shoppingcart">
+    		<id column="id" property="id"/>
+    		<result column="username" property="username"/>
+    		<collection property="shoppingCarts" ofType="ShoppingCart">
+    		<id column="id" property="id"></id>
+    		<result column="pid" property="pid"></result>
+    		<result column="num" property="num"/>
+    		<association property="product" javaType="Product">
+    		<id column="id" property="id"/>
+    		<result column="pnum" property="num" />
+    		<result column="pname" property="pname"/>
+    		<result column="price" property="price"/>
+    		<result column="imagename" property="imagename"/> 
+    		</association>
+    		</collection>
+    	</resultMap>
+    	<select id="getsc" resultMap="shoppingcart">
+    		select u.username,s.num,p.num pnum,p.id,p.pname,p.price,p.imagename from user_ u,product_ p,shoppingcart s where u.username=#{name} and u.id=s.uid and s.pid=p.id 
+    	</select>
+        <select id="login" parameterType="User"  resultType="User">
+            SELECT * FROM user_ where username=#{username} and pwd=#{pwd}
+        </select>    
+     	<insert id="register" parameterType="User">
+     		insert into user_ (username,pwd,type,rstime) values (#{username},#{pwd},#{type},#{rstime})
+     	</insert>
+     	<select id="huoqu" parameterType="User" resultType="User">
+     		select * from user_ where username=#{username}
+     	</select>
+     	<update id="udi" parameterType="java.util.Map" statementType="STATEMENT">
+     		update user_ set ${canshu}=${value} where username=${username}
+     	</update>
+     	<select id="usernum" resultType="java.lang.Integer">
+     		select count(*) from user_ where rstime=#{0}
+     	</select>
+     	<select id="allUsers" resultType="User">
+     		select * from user_
+     	</select>
+     	<update id="updateuser" parameterType="User">
+     		update user_ set pwd=#{pwd},type=#{type},sex=#{sex},phone=#{phone},address=#{address} where username=#{username}
+     	</update>
+     	<insert id="tianjia" parameterType="User">
+     		insert into user_ (username,pwd,type,sex,phone,address,rstime) values (#{username},#{pwd},#{type},#{sex},#{phone},#{address},#{rstime})
+     	</insert>
+     	<delete id="deleteuser">
+     		delete from user_ where username=#{0}
+     	</delete>
+     	<select id="usertongji" resultType="java.lang.Integer">
+     		SELECT COUNT(*) FROM user_ WHERE rstime like concat(#{0},'%')
+     	</select>
+     	<select id="getid" resultType="User">
+     		select * from user_ where id=#{0}
+     	</select>
+    </mapper>
